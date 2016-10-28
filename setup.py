@@ -77,6 +77,7 @@ class BuildExtCommand(build_ext):
         build_ext.run(self)
 
 
+work_dir=os.getenv('SETOOLS_WORK_DIR')
 try:
     static_sepol = os.environ['SEPOL']
 except KeyError:
@@ -126,9 +127,9 @@ ext_py_mods = [Extension('setools.policyrep._qpol',
                           'libqpol/policy_parse.c',
                           'libqpol/policy_scan.c',
                           'libqpol/xen_query.c'],
-                         include_dirs=['libqpol', 'libqpol/include'],
+                         include_dirs=['libqpol', 'libqpol/include', work_dir+'/selinux/output/usr/include'],
                          libraries=['bz2', 'selinux', 'sepol'],
-                         extra_compile_args=['-Werror', '-Wextra',
+                         extra_compile_args=['-Werror', '-Wextra','-Wno-sign-compare',
                                              '-Waggregate-return',
                                              '-Wcast-align',
                                              '-Wfloat-equal',
@@ -151,7 +152,7 @@ ext_py_mods = [Extension('setools.policyrep._qpol',
                                              '-fno-exceptions'],
                          extra_objects=[static_sepol],
                          extra_link_args=['-Wl,--version-script=libqpol/libqpol.map'],
-                         swig_opts=['-Ilibqpol/include'])]
+                         swig_opts=['-Ilibqpol/include', '-I{}/selinux/output/usr/include'.format(work_dir)])]
 
 setup(name='setools',
       version='4.0.1',
