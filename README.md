@@ -1,3 +1,5 @@
+个人的修订分支，基于源的4.0分支
+
 # SETools: Policy analysis tools for SELinux
 https://github.com/TresysTechnology/setools/wiki
 
